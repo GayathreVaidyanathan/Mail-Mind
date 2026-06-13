@@ -1,0 +1,47 @@
+# Virtual environment
+myenv/
+venv/
+.venv/
+
+# Secrets — never commit these
+.env
+credentials.json
+token.json
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Jupyter notebooks (if you ever test in them)
+.ipynb_checkpoints/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# pytest cache
+.pytest_cache/
+
+# Benchmark outputs (Excel files with your email data — privacy)
+*.xlsx
+*.csv
+# Frontend build output (can be regenerated with npm run build)
+frontend/dist/
+frontend/node_modules/
+
+# Environment files for different stages
+.env.local
+.env.production

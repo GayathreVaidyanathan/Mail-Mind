@@ -1,0 +1,19 @@
+# ── Web framework ──────────────────────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ── AI / Ollama ────────────────────────────────────────────────────────────────
+openai              # Ollama uses OpenAI-compatible API
+
+# ── HTML parsing (email body extraction) ──────────────────────────────────────
+beautifulsoup4
+
+# ── DNS (ValidatorAgent) ──────────────────────────────────────────────────────
+dnspython
+
+# ── Environment ───────────────────────────────────────────────────────────────
+python-dotenv
+
+# ── Data ──────────────────────────────────────────────────────────────────────
+pydantic
