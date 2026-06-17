@@ -21,6 +21,15 @@ Organisation mirrors the classifier tiers:
   Tier 5  — Academic / info
   Tier 5.5— Newsletter / advocacy (content-based)
   Tier 6  — Personal work
+
+Changelog:
+  - Added "notifications@" to AUTOMATED_SENDER_FRAGMENTS so that
+    notifications@stck.me is caught by _is_automated() as a backstop.
+  - Moved "spotify.com" from PROMOTIONAL_SENDER_DOMAINS to DELIVERY_APP_DOMAINS
+    so transactional keyword check fires before promotional domain rule —
+    fixes order confirmations and cancellation emails being misclassified.
+  - Moved "nykaa.com" from PROMOTIONAL_SENDER_DOMAINS to DELIVERY_APP_DOMAINS
+    so delivery updates are correctly classified as account_notification.
 """
 
 
@@ -115,17 +124,19 @@ TRANSACTIONAL_SUBJECT_KEYWORDS = [
     "your plan", "your storage", "more storage", "storage upgrade",
     "plan update", "plan now", "plan has been", "added to your",
     "now includes", "has been upgraded", "storage increased",
-    "you are now a", "welcome to", "member", "membership activated", 
-    "subscription activated", "account activated"
-     "membership activated", "membership details", 
-     "you are now a", "member!", "membership has been activated",
-     "congrats on redeeming", "your membership",
+    "you are now a", "welcome to", "member", "membership activated",
+    "subscription activated", "account activated",
+    "membership activated", "membership details",
+    "you are now a", "member!", "membership has been activated",
+    "congrats on redeeming", "your membership",
+    # Spotify-specific (order confirmation, cancellation)
+    "order confirmation", "you're no longer on", "no longer on",
 ]
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # TIER 3.5 — SOCIAL PLATFORM NOTIFICATIONS
-# ══════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════
 
 # These platforms send both genuine notifications AND promotional digests.
 # Transactional keywords are checked first; only fall to promotional if no match.
@@ -165,6 +176,13 @@ SOCIAL_NOTIFICATION_KEYWORDS = [
 
 # These apps send both transactional and promotional emails.
 # Transactional keywords checked first; fall to promotional only if no match.
+#
+# NOTE: "spotify.com" moved here from PROMOTIONAL_SENDER_DOMAINS — Spotify
+# sends genuine transactional emails (order confirmations, plan cancellations)
+# that must be classified as account_notification, not promotional.
+#
+# NOTE: "nykaa.com" moved here from PROMOTIONAL_SENDER_DOMAINS — Nykaa
+# sends delivery updates (account_notification) alongside marketing emails.
 DELIVERY_APP_DOMAINS = [
     # Food delivery
     "swiggy.in", "zomato.com", "blinkit.com",
@@ -173,16 +191,22 @@ DELIVERY_APP_DOMAINS = [
     "bumble.com", "tinder.com", "hinge.co",
     # Gaming / entertainment
     "chess.com",
+    # Music / streaming — sends order confirmations, plan change alerts
+    "spotify.com",
+    # Beauty / e-commerce — sends delivery updates alongside marketing
+    "nykaa.com",
 ]
+
 # ══════════════════════════════════════════════════════════════════════════════
 # TIER 4 — PROMOTIONAL
 # ══════════════════════════════════════════════════════════════════════════════
 
 # Known digest/newsletter sender domains — always promotional.
 # NOTE: Social platforms moved to SOCIAL_NOTIFICATION_DOMAINS above.
+# NOTE: spotify.com and nykaa.com moved to DELIVERY_APP_DOMAINS above.
+# NOTE: wattpad.com, substack.com, stck.me handled by _STORY_PLATFORM_DOMAINS
+#       in classifier_agent.py — do NOT add them here.
 PROMOTIONAL_SENDER_DOMAINS = [
-    # Music / entertainment (digests only — no personal notifications)
-    "spotify.com", "soundcloud.com",
     # Job spam
     "naukri.com", "shine.com", "foundit.in",
     "monster.com", "ziprecruiter.com",
@@ -320,6 +344,10 @@ PERSONAL_SENDER_DOMAINS = [
 ]
 
 # Automated/role address fragments — sender containing these is NOT personal
+#
+# NOTE: "notifications@" added here so that notifications@stck.me and similar
+# platform notification addresses are caught by _is_automated() as a backstop,
+# even when the domain is not in _STORY_PLATFORM_DOMAINS.
 AUTOMATED_SENDER_FRAGMENTS = [
     "noreply", "no-reply", "donotreply", "do-not-reply",
     "notifications@", "alerts@", "mailer@",

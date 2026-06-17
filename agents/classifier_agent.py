@@ -26,6 +26,16 @@ Pipeline position:
     - Confirmed spam routed out   (SpamFilterAgent)
     - Body cleaned                (PreFilterAgent)
     - Forwards detected           (PreFilterAgent)
+
+Changelog:
+  - stck.me / Substack misclassified as personal_work → fixed by adding
+    "stck.me" and "substack.com" to SOCIAL_NOTIFICATION_DOMAINS (signals.py)
+    and "notifications@" to AUTOMATED_SENDER_FRAGMENTS (signals.py).
+  - Spotify order/cancellation emails misclassified as promotional → fixed by
+    moving "spotify.com" to DELIVERY_APP_DOMAINS (signals.py) so transactional
+    keyword check fires before promotional domain rule.
+  - Nykaa sends both transactional and promotional → moved to DELIVERY_APP_DOMAINS.
+  - Wattpad sends only marketing/digest → added to PROMOTIONAL_SENDER_DOMAINS.
 """
 
 import re
@@ -58,6 +68,10 @@ from core.signals import (
 # Sender address fragments that indicate automated/system mail.
 # Broader than AUTOMATED_SENDER_FRAGMENTS in signals.py — covers bank
 # alert patterns like cbsalerts.sbi@alerts.sbi.bank.in
+#
+# NOTE: "notifications@" is now in AUTOMATED_SENDER_FRAGMENTS (signals.py)
+# so stck.me (notifications@stck.me) is caught by _is_automated() before
+# reaching the personal sender check at Rule 14.
 _AUTO_SENDER_FRAGMENTS = AUTOMATED_SENDER_FRAGMENTS + [
     "no_reply", "do_not_reply",
     "support@",
@@ -89,6 +103,27 @@ _EXTRA_TRANSACTIONAL_SUBJECTS = [
     "verification code",       # catches "Email Verification Code" exactly
 ]
 
+# Reddit activity keywords — signals that the email was triggered by
+# something the user did or something directed at them personally.
+_REDDIT_ACTIVITY_KEYWORDS = (
+    "comment", "reply", "replied", "mention", "mentioned",
+    "upvot", "award", "message", "inbox", "private message",
+    "password", "verify", "security", "account",
+)
+
+# Reddit sender domains — both the mailing domain and the main domain.
+_REDDIT_DOMAINS = ("redditmail.com", "reddit.com")
+
+# Substack / story platform activity keywords — signals that the email
+# is a genuine notification (new chapter, new post) rather than a
+# marketing blast. Substack and stck.me are in SOCIAL_NOTIFICATION_DOMAINS
+# so these are checked at Rule 3 before any AI fallback.
+_STORY_PLATFORM_ACTIVITY_KEYWORDS = (
+    "chapter", "chapters", "new post", "new issue", "published",
+    "posted", "update", "part ", "episode", "story update",
+    "new story", "just published", "latest post",
+)
+
 
 # ══════════════════════════════════════════════════════════════════════════════
 # AI PROMPT
@@ -107,6 +142,7 @@ CATEGORIES:
     - Triggered by YOUR own action on a platform
     - Order confirmations, delivery updates, OTPs, password resets, security alerts
     - Bank transaction alerts, subscription changes
+    - Story/newsletter platform notifications (new chapter, new post from someone you follow)
     - Ask: "Did I do something that caused this?" — if yes, pick this
 
   academic_info
@@ -128,6 +164,7 @@ HARD RULES:
   - Generic salutation (Dear Customer)                → NEVER personal_work
   - Sender is an organization, company, institution   → NEVER personal_work
   - Forwarded email → classify by content, not by who forwarded it
+  - notifications@ in sender                          → NEVER personal_work
   - When unsure                                       → promotional
 
 EXAMPLES:
@@ -155,6 +192,17 @@ From: gayathrevaidya@gmail.com
 Subject: Fwd: New privacy settings for Search services
 → account_notification
 (forwarded informational content about a platform update, not promotional)
+
+From: notifications@stck.me
+Subject: Chapters ~ 57 & 58 (Swords & Widow)
+→ account_notification
+(story platform notification for content you follow)
+
+From: no-reply@substack.com
+Subject: God, if I'm meant to be alone, take away my desire to be loved
+→ account_notification
+(newsletter digest from a publication you subscribed to)
+
 Reply with ONLY the category name. No explanation. No punctuation."""
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -168,12 +216,16 @@ class ClassifierAgent:
     Rule order (each rule is independent — no cascading interactions):
       1.  pre_category hint from PreFilterAgent
       2.  Known promotional sender domains
+      3a. Reddit sender domains (override before generic social loop)
+      3b. Story/newsletter platform domains (substack, stck.me) — override
+          before generic social loop so chapter/post subjects don't fall
+          through to AI fallback
       3.  Social platform domains
       4.  Delivery / lifestyle app domains
       5.  Known academic sender domains
       6.  Automated sender + transactional subject → account_notification
       7.  Automated sender + extra transactional subjects
-      8.  Non-personal, non-automated sender + transactional subject
+      8.  Non-personal, non-automated sender + transactional keyword
       9.  Promotional subject keywords
       10. Unsubscribe + newsletter body signals → academic_info
       11. Unsubscribe present, no newsletter signals → promotional
@@ -195,6 +247,21 @@ class ClassifierAgent:
         "spam",
     }
 
+    # Story / newsletter platforms — send genuine activity notifications
+    # (new chapter, new post) that should be account_notification, and
+    # marketing blasts that should be promotional.
+    # Kept here (not signals.py) because the keyword check logic is
+    # specific to this rule and not shared with other agents.
+    _STORY_PLATFORM_DOMAINS = (
+        "substack.com",
+        "stck.me",
+        "medium.com",
+        "beehiiv.com",
+        "ghost.io",
+        "convertkit.com",
+        "mailchimp.com",
+    )
+
     def __init__(self):
         self.client = OpenAI(base_url=OLLAMA_BASE_URL, api_key="ollama")
         self.model  = OLLAMA_MODEL
@@ -205,9 +272,9 @@ class ClassifierAgent:
     def run(self, msg: EmailMessage) -> EmailMessage:
         print(f"  [{self.name}] Classifying: '{msg['subject'][:60]}'...")
 
-        t_start      = time.perf_counter()
+        t_start       = time.perf_counter()
         category, via = self._classify(msg)
-        elapsed      = (time.perf_counter() - t_start) * 1000
+        elapsed       = (time.perf_counter() - t_start) * 1000
 
         icon = "⚡" if via == "rule" else "🤖"
         print(f"  [{self.name}] {icon} {via.capitalize():<5} → {category}  ({elapsed:.1f} ms)")
@@ -222,10 +289,10 @@ class ClassifierAgent:
         Returns (category, "rule") or (category, "AI").
         Rules are flat and independent — no tier fall-through interactions.
         """
-        sender    = msg.get("sender",  "").lower()
-        subject   = msg.get("subject", "").lower()
-        body      = msg.get("body",    "")[:1000].lower()
-        combined  = subject + " " + body
+        sender   = msg.get("sender",  "").lower()
+        subject  = msg.get("subject", "").lower()
+        body     = msg.get("body",    "")[:1000].lower()
+        combined = subject + " " + body
 
         is_auto     = self._is_automated(sender)
         has_unsub   = self._has_any(body, UNSUBSCRIBE_PATTERNS)
@@ -239,6 +306,39 @@ class ClassifierAgent:
         if self._has_any(sender, PROMOTIONAL_SENDER_DOMAINS):
             return "promotional", "rule"
 
+        # ── 3a. Reddit override ───────────────────────────────────────────
+        # Reddit sends two kinds of email:
+        #   - Activity alerts (comment, reply, mention, upvote) → account_notification
+        #   - Community digests (subreddit posts, trending threads) → academic_info
+        # Neither is promotional. This must sit before the generic social
+        # domain loop (Rule 3) so digest subjects like "Pipeline" or
+        # "Goodbye ChatGPT" don't fall through to the promotional keyword
+        # check at Rule 9.
+        if any(d in sender for d in _REDDIT_DOMAINS):
+            if self._has_any(combined, _REDDIT_ACTIVITY_KEYWORDS):
+                return "account_notification", "rule"
+            return "academic_info", "rule"
+
+        # ── 3b. Story / newsletter platform override ──────────────────────
+        # Substack, stck.me and similar platforms send two kinds of email:
+        #   - Activity notifications (new chapter, new post from a followed
+        #     author) → account_notification
+        #   - Marketing / digest blasts → promotional
+        # This must sit before Rule 3 (generic social domain loop) so that
+        # chapter notification subjects don't reach the AI fallback and get
+        # misclassified as personal_work.
+        #
+        # Detection logic:
+        #   - If subject contains a story/post activity keyword → account_notification
+        #   - If body has unsubscribe signal → promotional (marketing blast)
+        #   - Otherwise → account_notification (safe default for followed content)
+        if any(d in sender for d in self._STORY_PLATFORM_DOMAINS):
+            if self._has_any(combined, _STORY_PLATFORM_ACTIVITY_KEYWORDS):
+                return "account_notification", "rule"
+            if has_unsub:
+                return "promotional", "rule"
+            return "account_notification", "rule"
+
         # ── 3. Social platform domains ────────────────────────────────────
         for domain in SOCIAL_NOTIFICATION_DOMAINS:
             if domain in sender:
@@ -249,9 +349,14 @@ class ClassifierAgent:
                 return "promotional", "rule"
 
         # ── 4. Delivery / lifestyle app domains ───────────────────────────
+        # Covers: food delivery, dating apps, music (spotify), beauty (nykaa).
+        # Transactional keywords checked first — only fall to promotional
+        # if neither transactional nor extra-transactional subject matches.
         for domain in DELIVERY_APP_DOMAINS:
             if domain in sender:
                 if self._has_any(combined, TRANSACTIONAL_SUBJECT_KEYWORDS):
+                    return "account_notification", "rule"
+                if self._has_any(combined, _EXTRA_TRANSACTIONAL_SUBJECTS):
                     return "account_notification", "rule"
                 return "promotional", "rule"
 
@@ -263,11 +368,11 @@ class ClassifierAgent:
         if is_auto and self._has_any(combined, TRANSACTIONAL_SUBJECT_KEYWORDS):
             return "account_notification", "rule"
 
-        # ── 7. Automated sender + extra transactional subjects ─────────────
+        # ── 7. Automated sender + extra transactional subjects ────────────
         if is_auto and self._has_any(combined, _EXTRA_TRANSACTIONAL_SUBJECTS):
             return "account_notification", "rule"
 
-        # ── 8. Non-personal sender + transactional keywords ────────────────
+        # ── 8. Non-personal sender + transactional keywords ───────────────
         # Catches senders like cbsalerts.sbi@alerts.sbi.bank.in that don't
         # contain "noreply" but are clearly not personal senders.
         if not is_personal:

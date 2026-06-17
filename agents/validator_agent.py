@@ -42,8 +42,8 @@ Design notes
   • SPF / DMARC results are cached separately under self.trust_cache
     for the same reason.
   • ALWAYS_VALID_DOMAINS skips MX lookup for known high-volume senders.
-  • Parent-domain fallback handles legitimate senders that use subdomains
-    (e.g. team@hi.wellfound.com) where the subdomain itself has no MX record.
+  • Parent-domain fallback walks up the domain tree progressively
+    (e.g. mail.uipath.com → uipath.com) before giving up.
   • Spoofing check allows subdomains of known brands (e.g. accounts.google.com).
 
 Requires
@@ -58,12 +58,47 @@ from core.message_bus import EmailMessage
 # ── Constants ──────────────────────────────────────────────────────────────────
 
 ALWAYS_VALID_DOMAINS = {
+    # Personal email providers
     "gmail.com", "yahoo.com", "outlook.com", "hotmail.com",
     "protonmail.com", "icloud.com", "live.com", "me.com",
-    "swiggy.in", "zomato.com", "amazon.com", "flipkart.com",
-    "kaggle.com", "github.com", "linkedin.com", "google.com",
+    "zohomail.in", "zohomail.com", "zoho.com",
+
+    # Indian apps / payment
+    "swiggy.in", "zomato.com", "flipkart.com", "myntra.com",
     "payu.in", "razorpay.com", "phonepe.com", "paytm.com",
-    "wellfound.com",
+    "naukri.com", "nykaa.com", "bigbasket.com",
+
+    # Global platforms
+    "amazon.com", "google.com", "github.com", "linkedin.com",
+    "kaggle.com", "spotify.com", "chess.com", "bumble.com",
+    "tinder.com", "wattpad.com", "inkitt.com", "goodreads.com",
+    "substack.com", "wellfound.com", "openai.com",
+
+    # Creative / AI tools
+    "nightcafe.studio", "midjourney.com", "runwayml.com",
+    "leonardo.ai", "stability.ai", "adobe.com",
+
+    # Dev / learning tools
+    "uipath.com", "resumeworded.com", "turbohire.co",
+    "infosys.com", "tspsubmission.com", "canva.com",
+    "geeksforgeeks.org",
+
+    # AI / dev APIs
+    "groq.com", "groq.co",
+
+    # Social
+    "redditmail.com", "reddit.com", "facebookmail.com", "twitter.com", "x.com",
+
+    # Newsletters / link shorteners used by legit senders
+    "stck.me",
+
+    # Advocacy / newsletters
+    "interactadvocates.org",
+
+    # Indian government / banking
+    "mybharat.gov.in", "sbi.co.in", "alerts.sbi.co.in", "alerts.sbi.bank.in",
+    "hdfcbank.com", "icicibank.com", "axisbank.com",
+    "communications.sbi.co.in",
 }
 
 DISPOSABLE_DOMAINS = {
@@ -207,43 +242,59 @@ class ValidatorAgent:
         if domain in self._mx_cache:
             return self._mx_cache[domain]
 
+        # Fast path: known valid domain
         if domain in ALWAYS_VALID_DOMAINS:
             self._mx_cache[domain] = True
             return True
 
-        # Parent-domain fallback: hi.wellfound.com → wellfound.com
+        # Fast path: subdomain of a known valid domain
+        # Walk ALL parent levels — e.g. tx.nightcafe.studio → nightcafe.studio
         parts = domain.split(".")
-        if len(parts) > 2:
-            parent = ".".join(parts[-2:])
+        for i in range(1, len(parts)):
+            parent = ".".join(parts[i:])
             if parent in ALWAYS_VALID_DOMAINS:
                 self._mx_cache[domain] = True
                 return True
 
-        try:
-            dns.resolver.resolve(domain, "MX")
-            self._mx_cache[domain] = True
-            return True
-        except (
-            dns.resolver.NXDOMAIN,
-            dns.resolver.NoAnswer,
-            dns.resolver.NoNameservers,
-            dns.exception.Timeout,
-        ):
-            # Retry on parent domain before giving up
-            if len(parts) > 2:
-                parent = ".".join(parts[-2:])
-                try:
-                    dns.resolver.resolve(parent, "MX")
-                    self._mx_cache[domain] = True
-                    return True
-                except Exception:
-                    pass
-            self._mx_cache[domain] = False
-            return False
-        except Exception:
-            # Unknown error — assume valid to avoid false positives
-            self._mx_cache[domain] = True
-            return True
+        # Build list of candidates: domain itself + each parent (≥2 labels)
+        domains_to_try = []
+        for i in range(len(parts) - 1):
+            candidate = ".".join(parts[i:])
+            if len(candidate.split(".")) >= 2:
+                domains_to_try.append(candidate)
+
+        resolver = dns.resolver.Resolver()
+        resolver.lifetime = 3.0   # max total time per query (seconds)
+        resolver.timeout  = 1.5   # per-nameserver timeout
+
+        for candidate in domains_to_try:
+            # MX record → definitely valid
+            try:
+                resolver.resolve(candidate, "MX")
+                self._mx_cache[domain] = True
+                return True
+            except Exception:
+                pass
+
+            # A record → domain exists, just outbound-only
+            try:
+                resolver.resolve(candidate, "A")
+                self._mx_cache[domain] = True
+                return True
+            except Exception:
+                pass
+
+            # TXT record → domain exists (SPF etc.)
+            try:
+                resolver.resolve(candidate, "TXT")
+                self._mx_cache[domain] = True
+                return True
+            except Exception:
+                pass
+
+        # No DNS records anywhere in the chain → truly fake
+        self._mx_cache[domain] = False
+        return False
 
     # ── SPF lookup ────────────────────────────────────────────────────────────
 

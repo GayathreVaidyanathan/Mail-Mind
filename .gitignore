@@ -43,5 +43,6 @@ frontend/dist/
 frontend/node_modules/
 
 # Environment files for different stages
+
 .env.local
 .env.production
