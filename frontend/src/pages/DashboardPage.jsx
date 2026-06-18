@@ -5,6 +5,7 @@ import { disconnect, authStatus } from '../api/client'
 import { runPipeline } from '../api/client'
 import EmailCard from '../components/EmailCard'
 import PipelineLog from '../components/PipelineLog'
+import ExportPanel from '../components/ExportPanel'
 import { LogOut, Play, Zap, CheckCircle, AlertCircle } from 'lucide-react'
 
 export default function DashboardPage() {
@@ -115,120 +116,147 @@ export default function DashboardPage() {
       </nav>
 
       {/* ── Main ── */}
-      <main style={{ flex: 1, maxWidth: '860px', width: '100%', margin: '0 auto', padding: '32px 24px' }}>
+      <main style={{ flex: 1, maxWidth: '1180px', width: '100%', margin: '0 auto', padding: '32px 24px' }}>
 
-        {/* ── Run bar ── */}
+        {/* ── Two-column layout: content left, export sidebar right ── */}
         <div style={{
-          display:      'flex',
-          alignItems:   'center',
-          justifyContent:'space-between',
-          marginBottom: '24px',
-          gap:          '16px',
+          display:  'flex',
+          gap:      '28px',
+          alignItems: 'flex-start',
         }}>
-          <div>
-            <h1 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '2px' }}>
-              Email Pipeline
-            </h1>
-            <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-              {done
-                ? `Processed ${total} emails`
-                : running
-                ? `Processing ${emails.length} of ${total || '?'}...`
-                : 'Run the pipeline to process your unread emails'}
-            </p>
-          </div>
-          <button
-            onClick={handleRun}
-            disabled={running}
-            style={{
+
+          {/* ── Left: primary content ── */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+
+            {/* ── Run bar ── */}
+            <div style={{
               display:      'flex',
               alignItems:   'center',
-              gap:          '8px',
-              padding:      '10px 20px',
-              borderRadius: 'var(--radius-sm)',
-              border:       'none',
-              background:   running ? 'var(--surface-2)' : 'var(--accent)',
-              color:        running ? 'var(--text-dim)' : '#fff',
-              fontSize:     '14px',
-              fontWeight:   '600',
-              cursor:       running ? 'not-allowed' : 'pointer',
-              transition:   'background 0.2s',
-              fontFamily:   'var(--sans)',
-              whiteSpace:   'nowrap',
-            }}
-          >
-            <Play size={14} />
-            {running ? 'Running...' : 'Run pipeline'}
-          </button>
-        </div>
+              justifyContent:'space-between',
+              marginBottom: '24px',
+              gap:          '16px',
+            }}>
+              <div>
+                <h1 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '2px' }}>
+                  Email Pipeline
+                </h1>
+                <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                  {done
+                    ? `Processed ${total} emails`
+                    : running
+                    ? `Processing ${emails.length} of ${total || '?'}...`
+                    : 'Run the pipeline to process your unread emails'}
+                </p>
+              </div>
+              <button
+                onClick={handleRun}
+                disabled={running}
+                style={{
+                  display:      'flex',
+                  alignItems:   'center',
+                  gap:          '8px',
+                  padding:      '10px 20px',
+                  borderRadius: 'var(--radius-sm)',
+                  border:       'none',
+                  background:   running ? 'var(--surface-2)' : 'var(--accent)',
+                  color:        running ? 'var(--text-dim)' : '#fff',
+                  fontSize:     '14px',
+                  fontWeight:   '600',
+                  cursor:       running ? 'not-allowed' : 'pointer',
+                  transition:   'background 0.2s',
+                  fontFamily:   'var(--sans)',
+                  whiteSpace:   'nowrap',
+                }}
+              >
+                <Play size={14} />
+                {running ? 'Running...' : 'Run pipeline'}
+              </button>
+            </div>
 
-        {/* ── Progress log ── */}
-        {logs.length > 0 && <div style={{ marginBottom: '24px' }}><PipelineLog logs={logs} /></div>}
+            {/* ── Progress log ── */}
+            {logs.length > 0 && (
+            <div style={{ marginBottom: '24px' }}>
+              <PipelineLog logs={logs} />
+            </div>
+            )}
+            {/* ── Error ── */}
+            {error && (
+              <div style={{
+                display:      'flex',
+                alignItems:   'center',
+                gap:          '8px',
+                padding:      '12px 16px',
+                borderRadius: 'var(--radius-sm)',
+                background:   '#ef444418',
+                border:       '1px solid #ef444430',
+                color:        '#ef4444',
+                fontSize:     '13px',
+                marginBottom: '24px',
+              }}>
+                <AlertCircle size={14} />
+                {error}
+              </div>
+            )}
 
-        {/* ── Error ── */}
-        {error && (
-          <div style={{
-            display:      'flex',
-            alignItems:   'center',
-            gap:          '8px',
-            padding:      '12px 16px',
-            borderRadius: 'var(--radius-sm)',
-            background:   '#ef444418',
-            border:       '1px solid #ef444430',
-            color:        '#ef4444',
-            fontSize:     '13px',
-            marginBottom: '24px',
-          }}>
-            <AlertCircle size={14} />
-            {error}
-          </div>
-        )}
+            {/* ── Done summary ── */}
+            {done && counts && (
+              <div style={{
+                display:      'flex',
+                alignItems:   'center',
+                gap:          '10px',
+                padding:      '12px 16px',
+                borderRadius: 'var(--radius-sm)',
+                background:   '#22c55e18',
+                border:       '1px solid #22c55e30',
+                color:        '#22c55e',
+                fontSize:     '13px',
+                marginBottom: '24px',
+                flexWrap:     'wrap',
+              }}>
+                <CheckCircle size={14} />
+                <span style={{ fontWeight: '600' }}>Pipeline complete —</span>
+                {Object.entries(counts)
+                  .filter(([, n]) => n > 0)
+                  .map(([cat, n]) => (
+                    <span key={cat} style={{ color: 'var(--text-muted)' }}>
+                      {cat.replace('_', ' ')}: <strong style={{ color: 'var(--text)' }}>{n}</strong>
+                    </span>
+                  ))}
+              </div>
+            )}
 
-        {/* ── Done summary ── */}
-        {done && counts && (
-          <div style={{
-            display:      'flex',
-            alignItems:   'center',
-            gap:          '10px',
-            padding:      '12px 16px',
-            borderRadius: 'var(--radius-sm)',
-            background:   '#22c55e18',
-            border:       '1px solid #22c55e30',
-            color:        '#22c55e',
-            fontSize:     '13px',
-            marginBottom: '24px',
-            flexWrap:     'wrap',
-          }}>
-            <CheckCircle size={14} />
-            <span style={{ fontWeight: '600' }}>Pipeline complete —</span>
-            {Object.entries(counts)
-              .filter(([, n]) => n > 0)
-              .map(([cat, n]) => (
-                <span key={cat} style={{ color: 'var(--text-muted)' }}>
-                  {cat.replace('_', ' ')}: <strong style={{ color: 'var(--text)' }}>{n}</strong>
-                </span>
+            {/* ── Email feed ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {emails.map((msg) => (
+                <EmailCard key={msg.id} msg={msg} index={msg._index} />
               ))}
+            </div>
+
+            {/* ── Empty state ── */}
+            {!running && !done && emails.length === 0 && (
+              <div style={{
+                textAlign:  'center',
+                padding:    '80px 24px',
+                color:      'var(--text-dim)',
+              }}>
+                <Zap size={32} color="var(--border)" style={{ marginBottom: '12px' }} />
+                <p style={{ fontSize: '14px' }}>Hit "Run pipeline" to start processing your inbox</p>
+              </div>
+            )}
+
           </div>
-        )}
 
-        {/* ── Email feed ── */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {emails.map((msg) => (
-            <EmailCard key={msg.id} msg={msg} index={msg._index} />
-          ))}
-        </div>
-
-        {/* ── Empty state ── */}
-        {!running && !done && emails.length === 0 && (
+          {/* ── Right: export sidebar ── */}
           <div style={{
-            textAlign:  'center',
-            padding:    '80px 24px',
-            color:      'var(--text-dim)',
+            width:      '300px',
+            flexShrink: 0,
+            position:   'sticky',
+            top:        '88px', // navbar height (56px) + main top padding (32px)
           }}>
-            <Zap size={32} color="var(--border)" style={{ marginBottom: '12px' }} />
-            <p style={{ fontSize: '14px' }}>Hit "Run pipeline" to start processing your inbox</p>
+            <ExportPanel />
           </div>
-        )}
+
+        </div>
 
       </main>
     </div>

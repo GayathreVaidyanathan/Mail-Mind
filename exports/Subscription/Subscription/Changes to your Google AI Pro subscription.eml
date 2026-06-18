@@ -1,0 +1,1142 @@
+Delivered-To: gayathrevaidyanathan@gmail.com
+Received: by 2002:a05:7022:2386:b0:12c:8f29:1d6 with SMTP id bz6csp3043588dlb;
+        Tue, 19 May 2026 22:47:57 -0700 (PDT)
+X-Received: by 2002:a17:903:3b8e:b0:2b2:4b4e:e4d2 with SMTP id d9443c01a7336-2bd7e8056e8mr232754315ad.15.1779256077709;
+        Tue, 19 May 2026 22:47:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1779256077; cv=none;
+        d=google.com; s=arc-20240605;
+        b=C7Nv87Zel3OeEqtW8w3agxHfXrmeSwpfzqL6xUM8oOtej+gQtLk9RkorNJaHSQaduf
+         gbRyUTOmgmo0Mwn6HNRefnRxE5aQN2lP/48Uucx43GMgNh+fm6wCitKtPmWDYLDdinOl
+         dtQGPo3XnlLAcnue7wAwME8x606HQHq49zuBnA20qEOU9UFAFRG++Sn2/ddtYuKYmg7S
+         GHlEJkRMKr9GRDGntMTNL0N8PoWY019df3b7eAEbQmUlW3gIkDFOKke2tdYpGAnj4Ozn
+         D9hc9Vp9SWrEcFIeOCBFC2C+x/ZOYbfek0Dh5HMSTgMkzXjrYxRMfKXyZZCJF3l6+Bbc
+         objQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:from:subject:message-id:gmsai:feedback-id:date:mime-version
+         :dkim-signature;
+        bh=GN5qilP3OOkuUlxU1J05KmGPJ7egKkQIusPqDNWIG3M=;
+        fh=faqQVAD6x2YbMHgu+lon51agX6UhfZy6ESJz3n0heyw=;
+        b=cMEB51yy8APitO8APffpPcKSRI7xIbZjIXpzikGwztd7rOQ4CGTWPUZLYUtvGs8n6H
+         LDilf9bGlpHR1PajhteWTBxbpOnscqb4fgGB8cM78esWznrDvz0hLPACCyeQarXsJ3tV
+         uCV5Q0d0z/CgbPhGjMQ92cAZlRUarm4K6xct+TcZ8F2CUtGNqP3sbkui+M5DZhXZqxoD
+         lK+bT/zpNdejV0kk02VPq+fDG2sgPhuBDmavwM7tgQMnYtaGOx7YU4jnZkk/rWdCAPTU
+         GkweFg873Pp0TtaJ/VdOleHD8A7I4wHn3ow9enuxxzqVBcxs+7CMPUWGyTcst+V8iQL0
+         cE4g==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@google.com header.s=20251104 header.b=l5ha2ma0;
+       spf=pass (google.com: domain of 3dusnahekadasaasxqazq-zadqbxksaasxq.oay@scoutcamp.bounces.google.com designates 209.85.220.69 as permitted sender) smtp.mailfrom=3DUsNahEKADASaaSXQaZQ-ZadQbXkSaaSXQ.OaY@scoutcamp.bounces.google.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=google.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <3DUsNahEKADASaaSXQaZQ-ZadQbXkSaaSXQ.OaY@scoutcamp.bounces.google.com>
+Received: from mail-sor-f69.google.com (mail-sor-f69.google.com. [209.85.220.69])
+        by mx.google.com with SMTPS id d9443c01a7336-2bda0a12dafsor7874055ad.2.2026.05.19.22.47.57
+        for <gayathrevaidyanathan@gmail.com>
+        (Google Transport Security);
+        Tue, 19 May 2026 22:47:57 -0700 (PDT)
+Received-SPF: pass (google.com: domain of 3dusnahekadasaasxqazq-zadqbxksaasxq.oay@scoutcamp.bounces.google.com designates 209.85.220.69 as permitted sender) client-ip=209.85.220.69;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@google.com header.s=20251104 header.b=l5ha2ma0;
+       spf=pass (google.com: domain of 3dusnahekadasaasxqazq-zadqbxksaasxq.oay@scoutcamp.bounces.google.com designates 209.85.220.69 as permitted sender) smtp.mailfrom=3DUsNahEKADASaaSXQaZQ-ZadQbXkSaaSXQ.OaY@scoutcamp.bounces.google.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=google.com;
+       dara=pass header.i=@gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1779256077; x=1779860877; dara=google.com;
+        h=to:from:subject:message-id:gmsai:feedback-id:date:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GN5qilP3OOkuUlxU1J05KmGPJ7egKkQIusPqDNWIG3M=;
+        b=l5ha2ma0++62o5vy7ROD8fM8xf/u+rAh0fPvdMePZZPazBGPR5K9mNBtpPfIeqc3tA
+         GfRbjzAZM3t3v1kQXAlGTnYKLZhJ8w+x3vw45hk8lUKRS1WenS8wEsn1xUomo7YXuTKk
+         0qAl7Ldr+HihooGfn5ClvquX6eWFbvsgmB+qD2lAjlrmSSrtXOiNC17aDXXUqXXVg8h4
+         rJOlVJJeEAzA+KMDU07vZv+5XeTe0zNKLM/obf4KO+GDG7ZcUsYY8Kyw88Hypd4S3DgO
+         mfitp/1kK0ALTtvLooVXiuebcSx9/Ng+y2zCUyov9JUhLrdi/MM/g5ekoIAfJ7c8fzVe
+         FIvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1779256077; x=1779860877;
+        h=to:from:subject:message-id:gmsai:feedback-id:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GN5qilP3OOkuUlxU1J05KmGPJ7egKkQIusPqDNWIG3M=;
+        b=g2gDB8FufEIXDjJgK53Wfgur+a1RYt+oPnq2n6NBeZzhW1IFxavipJDBIpEZZa+qBM
+         nLb1a49KRaSQbmZ46uOcGSWAiOhsNN4WOSjwS6Jf0bNIZiHtP8PRI4roZdc9foOBhpad
+         b415pv2b7NHvHmgVPxHUb+lQAxl1++Ry40D8FMaaDDjdTwSUayX7zn0ZLJjn6Krd4/s5
+         sIMqt39pvfXkEFld6io5xzPr60Trud5+VFtQcRjiYec4lVY9tfv696aneFqkmnwr9yLW
+         a2a9FeWyTwJwvXPVUfiU9y/xmAaESybsEXmq5p640udmRJnk8WivlXEW8BAZ5Uz0Ndlb
+         sDWg==
+X-Gm-Message-State: AOJu0YxziWL9aj3sS0BvfjUz90r0vgBYxqw2MET1cSt1IAG+NhCpixY6
+	Zkt0kCcKzYrcyV+2Y4gidv9duXloHrNSXUZ/CXhHzJzSLggvUC8c6zvhiqsb
+MIME-Version: 1.0
+X-Received: by 2002:a17:90a:1c89:b0:369:932a:2b8a with SMTP id
+ 98e67ed59e1d1-369932a2ffemr9970340a91.1.1779256077477; Tue, 19 May 2026
+ 22:47:57 -0700 (PDT)
+Date: Tue, 19 May 2026 22:47:57 -0700
+Feedback-ID: P7692ce6245-0:C5578050974:M111198660-en:gamma
+gmsai: true
+X-Google-Notification-Metadata: CgISAA
+X-Notifications: 4b43798acc0e0000
+X-Notifications-Bounce-Info: AZJPhI1EnxqedcprPVT0qwXuiI_uxJCBf-m3LfHwpA5Irbo46EaTWQtRd8xmcecxPQSHJPRIPr3gEKGF8bVlfNXbZ_cdEjqborqqpXYdFb-87L4gAvCAhUMhF80eI7NqARcDEeVqXPTnH_wR0NOQB1DnaIRL0aWZzlpoiV5rdBxNA1bS_FsG_UeWAe-CiCqpsNUBWMOqn5pSdb-4lj5SlqVd4wmjwTVVgzTpgJCQuNQck9723ZXGsUOSXCZThtsXYA70rGSQDBGwDMKpgWmB2jRyw9SyD67QRMSk72iHXV5R0I9EsWhwqpTelYe-agn6E83mo6bWMi5vlXdQ2IfzrwloD5I_vQzT6Zkp0KuIv2H2oZy5-qK0NERN8mEgnCLRuGlYxytjmFR3EAsv1S74CTcBB-P4EVHWEuG_l02P9DorWMY7w6WVrsDSe5c8S9dHgn-C8kLJv33Rarepv5HM_GPU6AnRUz3qTOr6OheLNnJrth4lwuRmTR4JQoiHrpv9w9xwyxb_S_Y1u3JCNRssyfiHjL8jKlSZU_3-qNT0u9GooPrBTvBC9QNjAwNjA0MDQxNTM1NTk2OTMzMg
+Message-ID: <f9430fa6b8ba731f80459f70efc2d2120572146f-20397169-2043866901@google.com>
+Subject: Changes to your Google AI Pro subscription
+From: Google One <googleone-noreply@google.com>
+To: gayathrevaidyanathan@gmail.com
+Content-Type: multipart/alternative; boundary="000000000000766590065239563b"
+
+--000000000000766590065239563b
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+
+You have received this mandatory service announcement to update you about  
+important changes to your Google AI Pro subscription.
+---
+
+(c) 2026 Google LLC, 1600 Amphitheatre Parkway, Mountain View, CA 94043
+
+
+--000000000000766590065239563b
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+ =20
+
+
+  =20
+
+
+
+
+
+
+=20
+=20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=20
+
+
+=20
+=20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=20
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+=20
+
+
+
+ =20
+=20
+ <!--DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://w=
+ww.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"-->
+<html lang=3Den dir=3Dltr>
+<head>
+<title></title>
+<meta http-equiv=3DContent-Type content=3D"text/html; charset=3Dutf-8">
+<meta name=3Dviewport content=3D"width=3Ddevice-width, user-scalable=3Dyes,=
+initial-scale=3D1.0, minimum-scale=3D1.0, maximum-scale=3D2.0">
+<meta http-equiv=3DX-UA-Compatible content=3DIE=3Dedge>
+<meta name=3Dx-apple-disable-message-reformatting>
+<meta name=3Dformat-detection content=3Dtelephone=3Dno>
+<style>
+@font-face {
+font-family: 'Google Sans';
+font-style: normal;
+font-weight: 400;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJf=
+C6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrwEIKli.ttf) format('truetype=
+');}
+@font-face {
+font-family: 'Google Sans';
+font-style: normal;
+font-weight: 500;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJf=
+C6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrw2IKli.ttf) format('truetype=
+');}
+@font-face {
+font-family: 'Google Sans';
+font-style: normal;
+font-weight: 700;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/googlesans/v67/4Ua_rENHsxJlGDuGo1OIlJf=
+C6l_24rlCK1Yo_Iqcsih3SAyH6cAwhX9RFD48TE63OOYKtrzjJ6li.ttf) format('truetype=
+');}
+@font-face {
+font-family: 'Google Sans Text';
+font-style: normal;
+font-weight: 400;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/googlesanstext/v25/5aUu9-KzpRiLCAt4Unr=
+c-xIKmCU5mE0.ttf) format('truetype');}
+@font-face {
+font-family: 'Google Sans Text';
+font-style: normal;
+font-weight: 500;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/googlesanstext/v25/5aUp9-KzpRiLCAt4Unr=
+c-xIKmCU5oLlVrm8.ttf) format('truetype');}
+@font-face {
+font-family: 'Google Sans Text';
+font-style: normal;
+font-weight: 700;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/googlesanstext/v25/5aUp9-KzpRiLCAt4Unr=
+c-xIKmCU5oPFTrm8.ttf) format('truetype');}
+@font-face {
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-stretch: normal;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdT=
+ylUAMQXC89YmC2DPNWubEbWmT.ttf) format('truetype');}
+@font-face {
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 500;
+font-stretch: normal;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdT=
+ylUAMQXC89YmC2DPNWub2bWmT.ttf) format('truetype');}
+@font-face {
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 700;
+font-stretch: normal;
+font-display: swap;
+src: url(https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdT=
+ylUAMQXC89YmC2DPNWuYjammT.ttf) format('truetype');}
+</style>
+<style type=3Dtext/css>
+@media only screen and (min-width: 720px) {
+body {
+width: 720px;
+}
+.full-width {
+width: 720px;
+}
+.desktop-hide {
+display: none !important;
+}
+.margin {
+width: 28px;
+}
+.gutter {
+width: 20px;
+}
+}
+@media only screen and (max-width: 719px) {
+.m-hide {
+display: none !important;
+}
+.gutter {
+display: inline-block;
+text-align: center;
+margin: 0 auto;
+}
+}
+@media only screen and (min-width: 500px) and (max-width: 719px) {
+body {
+width: 500px;
+}
+.full-width {
+width: 500px;
+}
+.margin {
+width: 16px !important;
+}
+.gutter {
+width: 16px !important;
+}
+}
+@media only screen and (max-width: 499px) {
+body {
+width: 100%;
+}
+.full-width {
+width: 100%;
+}
+.margin {
+width: 16px !important;
+}
+.gutter {
+width: 16px !important;
+}
+}
+@media only screen and (max-width: 330px) {
+.full-width {
+width: 330px !important;
+}
+}
+@media only screen and (max-width: 719px) {
+h3,
+.h3 {
+font-size: 28px !important;
+}
+}
+.img-com img:hover {
+cursor: default;
+}
+img:hover {
+cursor: default;
+}
+@media only screen and (max-width: 499px) {
+.outer {
+box-sizing: border-box;
+}
+}
+@media only screen and (max-width: 719px) {
+.gutter {
+display: table-cell;
+}
+}
+@media only screen and (max-width: 719px) {
+.text-block .text-block_m-align-left .copy-lockup {
+text-align: left !important;
+}
+.text-block .subhead {
+color: #1F1F1F;
+}
+.text-block .bold {
+font-weight: 700 !important;
+}
+}
+@media only screen and (min-width: 600px) and (max-width: 767px) {
+.text-block .subhead {
+color: #1F1F1F;
+font-size: 14px !important;
+text-size-adjust: none !important;
+-webkit-text-size-adjust: 100% !important;
+-ms-text-size-adjust: none !important;
+-moz-text-size-adjust: none !important;
+}
+.text-block .bold p.subhead.copy {
+font-weight: 700 !important;
+}
+}
+@media only screen and (max-width: 599px) {
+body {
+width: 100% !important;
+}
+.full-width {
+width: 100% !important;
+}
+.hero-mod .copy-lockup {
+width: 90% !important;
+}
+.hero-mod .copy-lockup .headline {
+font-size: 26px !important;
+}
+.body-content .copy-lockup {
+width: 80% !important;
+}
+.bullet-list .single-bullet {
+width: 90% !important;
+}
+}
+</style>
+<style type=3Dtext/css>
+@media only screen {
+.text-secondary-copy .subhead-6 {
+padding-top: 0px !important;
+}
+.iw .sbs-60-40-recap .sbs-60-40__img_left {
+padding-right: 16px !important;
+}
+.ar .package-icon {
+padding-right: 0px;
+padding-left: 12px !important;
+}
+}
+@media only screen and (max-width: 719px) {
+.bento-card-1-eyebrow {
+margin-bottom: 12px !important;
+}
+}
+</style>
+</head>
+<body class=3D"body en" style=3D"color: #3C4043; font-family: &#39;Google S=
+ans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-weight: 4=
+00; font-size: 14px; line-height: 150%; -webkit-font-smoothing: antialiased=
+; margin: 0 auto; text-align: center; width: 600px;">
+<table role=3Dpresentation style=3D"width: 100%; border-collapse: collapse;=
+ margin: 0 auto !important; border: none; padding: 0;" cellpadding=3D0 cell=
+spacing=3D0 border=3D0><tbody><td style=3D"font-family: inherit; padding: 0=
+ !important; margin: 0 !important;">
+<div dir=3Dltr style=3D"box-sizing: border-box; display: none; font-family:=
+ &#39;Google Sans&#39;, Roboto, Arial, sans-serif; font-size: 0px; line-hei=
+ght: 0px; margin: 0;">Information about updates to your plan=E2=80=99s usag=
+e limits</div>
+<div style=3D"box-sizing: border-box; display: none; font-family: &#39;Goog=
+le Sans&#39;, Roboto, Arial, sans-serif; margin: 0; max-height: 0px; overfl=
+ow: hidden;" dir=3Dltr>=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=A0=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=
+=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F
+=E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=CD=8F =E2=80=87=
+=CD=8F =E2=80=87=CD=8F
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=
+=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD =C2=AD
+=C2=A0
+</div> <section>
+<div class=3D"outer full-width" dir=3Dltr style=3D"background-color: #FFFFF=
+F; margin: 0 auto; width: 600px;">
+<table cellspacing=3D0 cellpadding=3D0 border=3D0 role=3Dpresentation class=
+=3D"center full-width masthead" style=3D"text-align: center; margin: 0 auto=
+; width: 600px; padding: 48px 0 40px 0;" width=3D600 align=3Dcenter>
+<tr>
+<td style=3D"font-family: inherit; background-color: #ffffff;" bgcolor=3D#f=
+fffff>
+<table class=3D"center logo" cellspacing=3D0 cellpadding=3D0 border=3D0 rol=
+e=3Dpresentation style=3D"text-align: center; margin: 0 auto; border: 0px; =
+border-radius: 0px; background-color: #ffffff;" bgcolor=3D#ffffff align=3Dc=
+enter>
+<tr>
+<td class=3D"desktop-hide m-hide" style=3D"font-family: inherit;"></td>
+<td style=3D"font-family: inherit;">
+<div class=3D"img-com ">
+<a href=3D# target=3D_blank aria-hidden=3Dtrue style=3D"font-family: &#39;G=
+oogle Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; font-we=
+ight: 500; line-height: 150%; font-size: 14px; letter-spacing: 0px; color: =
+#0B57D0; text-decoration: none;">
+<img src=3Dhttps://ci3.googleusercontent.com/meips/ADKq_NZE5SQWt7tegYAps1s2=
+8mUiJVS9ZB-SxjsuaVGUyMMIfGnS9go3x8swUUrs9QWnPZSajby945VhMq2HetNNk5CesdcjW9E=
+NVOpxHF-xgg=3Ds0-d-e1-ft#https://services.google.com/fh/files/emails/one_lo=
+go.png alt width=3D54 height style=3D"display: block; text-align: center; m=
+argin: 0 auto;" aria-hidden=3Dtrue class=3D"img img-com__img center " borde=
+r=3D0>
+</a>
+</div>
+</td>
+<td class=3D"desktop-hide m-hide" style=3D"font-family: inherit;"></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<div class=3Dhero-mod>
+<div class=3D"copy-lockup center" style=3D"margin: 0 auto; text-align: cent=
+er; width: 444px;">
+<h3 style=3D"font-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helve=
+tica, Arial, sans-serif; font-weight: 400; letter-spacing: 0; line-height: =
+130%; color: #1F1F1F; font-size: 32px; margin: 0 0 6px 0;" class=3D"h3 copy=
+ headline small">Updates to your <span style=3D"white-space:nowrap; word-br=
+eak: break-word; " class=3D"span ">Google AI Pro</span>=C2=A0plan</h3>
+</div>
+</div>
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 40px; line-heig=
+ht: 40px;" height=3D40>=C2=A0</td>
+</tr>
+</table><div>
+<div class=3Dbody-content>
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; width: 480px;">
+<p class=3D"subhead copy left " style=3D"margin: 0; line-height: 150%; font=
+-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans=
+-serif; font-weight: 400; letter-spacing: 0; font-size: 16px; color: #5f636=
+8; text-align: left;">Hi Gayathre,</p>
+</div>
+<br>
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; width: 480px;">
+<p class=3D"subhead copy left " style=3D"margin: 0; line-height: 150%; font=
+-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans=
+-serif; font-weight: 400; letter-spacing: 0; font-size: 16px; color: #5f636=
+8; text-align: left;">We wanted to let you know about changes to the usage =
+limits included with your <span style=3D"white-space:nowrap; word-break: br=
+eak-word; " class=3D"span ">Google AI Pro</span> subscription.</p>
+</div>
+<br>
+</div>
+<div class=3Dbody-content>
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; width: 480px;">
+<p class=3D"subhead copy left " style=3D"margin: 0; line-height: 150%; font=
+-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans=
+-serif; font-weight: 400; letter-spacing: 0; font-size: 16px; color: #5f636=
+8; text-align: left;"><strong>What=E2=80=99s changing starting today, <span=
+ style=3Dwhite-space:nowrap;>=EF=BB=BFM=EF=BB=BFa=EF=BB=BFy=EF=BB=BF =EF=BB=
+=BF1=EF=BB=BF9=EF=BB=BF,=EF=BB=BF =EF=BB=BF2=EF=BB=BF0=EF=BB=BF2=EF=BB=BF6=
+=EF=BB=BF</span>:</strong></p>
+</div>
+</div>
+<br>
+<div class=3Dbullet-list>
+<div class=3D"text-block center full-width" style=3D"text-align: center; ma=
+rgin: 0 auto; -webkit-text-size-adjust: 100%; font-family: &#39;Google Sans=
+&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; color: #1F1F1F; w=
+idth: 600px;">
+<table role=3Dpresentation cellpadding=3D0 cellspacing=3D0 border=3D0 class=
+=3Dfull-width align=3Dcenter style=3D"margin: 0 auto; width: 600px;" width=
+=3D600>
+<tr>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> <td style=3D"font-family: inherit;">
+<table role=3Dpresentation cellpadding=3D0 cellspacing=3D0 border=3D0 class=
+=3D" center" width=3D100% style=3D"text-align: center; margin: 0 auto;" ali=
+gn=3Dcenter>
+<tr>
+<td style=3D"font-family: inherit;">
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 0px; line-heigh=
+t: 0px;" height=3D0>=C2=A0</td>
+</tr>
+</table>
+<table class=3D"single-bullet center" style=3D"margin: 0 auto; width: 540px=
+; text-align: center; padding-bottom: 16px;" role=3Dpresentation cellpaddin=
+g=3D0 cellspacing=3D0 border=3D0 width=3D540 align=3Dcenter>
+<tr>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> <td width=3D10 valign=3Dtop class=
+=3D"text-block_d-align-left text-block_m-align-left " style=3D"font-family:=
+ inherit;">
+<div class=3D"copy-lockup bold" style=3D"margin: 0 auto; font-weight: 700; =
+text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;">=E2=80=A2</p>
+</div>
+</td>
+<td width=3D8 style=3D"font-family: inherit;"> =C2=A0</td>
+<td valign=3Dtop class=3D"text-block_d-align-left text-block_m-align-left "=
+ style=3D"font-family: inherit;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;"><strong>Usage limits in the Gemini app:</strong> For the G=
+emini app, we=E2=80=99re introducing compute-based usage limits that factor=
+ in the complexity of your prompt, the features you use, and the length of =
+your chat. Your limit refreshes every 5 hours until you reach your weekly l=
+imit. As an AI=C2=A0Pro subscriber, you=E2=80=99ll enjoy a 4x higher usage =
+limit than non-subscribers.</p>
+</div>
+</td>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> </tr>
+</table>
+<table class=3D"single-bullet center" style=3D"margin: 0 auto; width: 540px=
+; text-align: center; padding-bottom: 16px;" role=3Dpresentation cellpaddin=
+g=3D0 cellspacing=3D0 border=3D0 width=3D540 align=3Dcenter>
+<tr>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> <td width=3D10 valign=3Dtop class=
+=3D"text-block_d-align-left text-block_m-align-left " style=3D"font-family:=
+ inherit;">
+<div class=3D"copy-lockup bold" style=3D"margin: 0 auto; font-weight: 700; =
+text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;">=E2=80=A2</p>
+</div>
+</td>
+<td width=3D8 style=3D"font-family: inherit;"> =C2=A0</td>
+<td valign=3Dtop class=3D"text-block_d-align-left text-block_m-align-left "=
+ style=3D"font-family: inherit;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;"><strong>AI credits:</strong> The product-based usage limit=
+ model is also rolling out to other products, starting with Flow and Antigr=
+avity. You can extend your limits by <a href=3Dhttps://c.gle/AOExmq3nA04U0r=
+XXjHLzEKBVa-PGBxlHRDPHbH30nCsudHoZVhR78UMJST6l55mPe7219iZCp3K_S59o7Y_rHbxxs=
+NrgXIqdMPO9f3Ayw-Z4lqFvufNRKuLY-PXEQ3Xk6wfqPXRHrEDzfIHROyTkm1mHy8ccf0M-LNsl=
+i4CnSMBKpVhJIeFksV8 style=3Dtext-decoration:underline;color:#0B57D0;white-s=
+pace:nowrap; target=3D_blank>purchasing</a> AI credits. While 1,000 AI cred=
+its will no longer be included as a benefit in your base plan each month, t=
+he new usage limit model we are introducing should allow you to maintain th=
+e same experience you are used to. To learn more about how to use AI credit=
+s, please visit our <a href=3Dhttps://c.gle/AOExmq3MsXeS5-u2S_hETMlJnA5Kqqf=
+R3IkWKEanxBI2-f_Y1l8X5DzmGqS6E622WCTevj1aoimnsRhNCNyFR6bmS9GR7TZk9T-PNdIBSi=
+UqasDpZDRT404aaOMHfoLyr657dZEI7QAJ8QUeSmSVifcYeNZOAPelAFTwyl36zneCizMf4RMR4=
+CE2t62m1zG4v9l0Ut6jLAmxH68Gcg style=3Dtext-decoration:underline;color:#0B57=
+D0;white-space:nowrap; target=3D_blank>Help Center</a>.</p>
+</div>
+</td>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> </tr>
+</table>
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 0px; line-heigh=
+t: 0px;" height=3D0>=C2=A0</td>
+</tr>
+</table> </td>
+</tr>
+</table>
+</td>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> </tr>
+</table>
+</div></div>
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 12px; line-heig=
+ht: 12px;" height=3D12>=C2=A0</td>
+</tr>
+</table>
+<div class=3Dbody-content>
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; width: 480px;">
+<p class=3D"subhead copy left " style=3D"margin: 0; line-height: 150%; font=
+-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans=
+-serif; font-weight: 400; letter-spacing: 0; font-size: 16px; color: #5f636=
+8; text-align: left;"><strong>What=E2=80=99s not changing:</strong></p>
+</div>
+</div>
+<br>
+<div class=3Dbullet-list>
+<div class=3D"text-block center full-width" style=3D"text-align: center; ma=
+rgin: 0 auto; -webkit-text-size-adjust: 100%; font-family: &#39;Google Sans=
+&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; color: #1F1F1F; w=
+idth: 600px;">
+<table role=3Dpresentation cellpadding=3D0 cellspacing=3D0 border=3D0 class=
+=3Dfull-width align=3Dcenter style=3D"margin: 0 auto; width: 600px;" width=
+=3D600>
+<tr>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> <td style=3D"font-family: inherit;">
+<table role=3Dpresentation cellpadding=3D0 cellspacing=3D0 border=3D0 class=
+=3D" center" width=3D100% style=3D"text-align: center; margin: 0 auto;" ali=
+gn=3Dcenter>
+<tr>
+<td style=3D"font-family: inherit;">
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 0px; line-heigh=
+t: 0px;" height=3D0>=C2=A0</td>
+</tr>
+</table>
+<table class=3D"single-bullet center" style=3D"margin: 0 auto; width: 540px=
+; text-align: center; padding-bottom: 16px;" role=3Dpresentation cellpaddin=
+g=3D0 cellspacing=3D0 border=3D0 width=3D540 align=3Dcenter>
+<tr>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> <td width=3D10 valign=3Dtop class=
+=3D"text-block_d-align-left text-block_m-align-left " style=3D"font-family:=
+ inherit;">
+<div class=3D"copy-lockup bold" style=3D"margin: 0 auto; font-weight: 700; =
+text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;">=E2=80=A2</p>
+</div>
+</td>
+<td width=3D8 style=3D"font-family: inherit;"> =C2=A0</td>
+<td valign=3Dtop class=3D"text-block_d-align-left text-block_m-align-left "=
+ style=3D"font-family: inherit;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;"><strong>Model access:</strong> You=E2=80=99ll continue to =
+have access to our latest Gemini=C2=A0Flash and Pro models and Thinking cap=
+abilities for both speed and intelligence.</p>
+</div>
+</td>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> </tr>
+</table>
+<table class=3D"single-bullet center" style=3D"margin: 0 auto; width: 540px=
+; text-align: center; padding-bottom: 16px;" role=3Dpresentation cellpaddin=
+g=3D0 cellspacing=3D0 border=3D0 width=3D540 align=3Dcenter>
+<tr>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> <td width=3D10 valign=3Dtop class=
+=3D"text-block_d-align-left text-block_m-align-left " style=3D"font-family:=
+ inherit;">
+<div class=3D"copy-lockup bold" style=3D"margin: 0 auto; font-weight: 700; =
+text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;">=E2=80=A2</p>
+</div>
+</td>
+<td width=3D8 style=3D"font-family: inherit;"> =C2=A0</td>
+<td valign=3Dtop class=3D"text-block_d-align-left text-block_m-align-left "=
+ style=3D"font-family: inherit;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;"><strong>Features and capabilities:</strong> You=E2=80=99ll=
+ continue to have access to Gemini app features like Deep=C2=A0Research, vi=
+deo generation, and more.</p>
+</div>
+</td>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> </tr>
+</table>
+<table class=3D"single-bullet center" style=3D"margin: 0 auto; width: 540px=
+; text-align: center; padding-bottom: 16px;" role=3Dpresentation cellpaddin=
+g=3D0 cellspacing=3D0 border=3D0 width=3D540 align=3Dcenter>
+<tr>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> <td width=3D10 valign=3Dtop class=
+=3D"text-block_d-align-left text-block_m-align-left " style=3D"font-family:=
+ inherit;">
+<div class=3D"copy-lockup bold" style=3D"margin: 0 auto; font-weight: 700; =
+text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;">=E2=80=A2</p>
+</div>
+</td>
+<td width=3D8 style=3D"font-family: inherit;"> =C2=A0</td>
+<td valign=3Dtop class=3D"text-block_d-align-left text-block_m-align-left "=
+ style=3D"font-family: inherit;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; text-align: left;">
+<p class=3D"subhead copy " style=3D"margin: 0; line-height: 150%; font-weig=
+ht: 400; letter-spacing: 0; font-family: &#39;Google Sans&#39;, &#39;Open S=
+ans&#39;, Helvetica, Arial, sans-serif; font-size: 16px; color: #5f6368; te=
+xt-align: left;"><strong>Storage:</strong> You will continue to have access=
+ to 5=C2=A0TB of shareable storage across Google=C2=A0Photos, Drive, and Gm=
+ail.</p>
+</div>
+</td>
+<td aria-hidden=3Dtrue width=3D57 class=3Dm-hide style=3D"font-family: inhe=
+rit;">=C2=A0</td> <td aria-hidden=3Dtrue width=3D16 class=3Ddesktop-hide st=
+yle=3D"font-family: inherit;">=C2=A0</td> </tr>
+</table>
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 0px; line-heigh=
+t: 0px;" height=3D0>=C2=A0</td>
+</tr>
+</table> </td>
+</tr>
+</table>
+</td>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> </tr>
+</table>
+</div></div>
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 12px; line-heig=
+ht: 12px;" height=3D12>=C2=A0</td>
+</tr>
+</table>
+<div class=3Dbody-content>
+<br>
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; width: 480px;">
+<p class=3D"subhead copy left " style=3D"margin: 0; line-height: 150%; font=
+-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans=
+-serif; font-weight: 400; letter-spacing: 0; font-size: 16px; color: #5f636=
+8; text-align: left;">No action is required from you. To learn more about t=
+hese changes you can visit our <a href=3Dhttps://c.gle/AOExmq202By9QKi6gNwr=
+2k2eaE1Ru-mSVYEx1bcXMixZrk1sB_MzeWJkx5jeFSXPlm5-6t_l4Y3pa5QDGv9_v1A_RZmyx7N=
+m5QMDBTbitulBq08wyCN0l87GqRRyxVmIBiuHNx65JpkZ-sYgdbQE3u-K4czZu8ZQH4ynYsMHXx=
+yFJj_frf6l5ZahgpIb4vM4tOBE5t9KFe11JnSXMfpHniQ style=3Dtext-decoration:under=
+line;color:#0B57D0;white-space:nowrap; target=3D_blank>Help Center article<=
+/a> for additional details. You can manage or cancel your <a href=3Dhttps:/=
+/c.gle/AOExmq3ybgg1pqar_dN6qQiZrObicgMpgkKQg05VTx7iKKyuurTCPi2vS_BUGRBrBBR5=
+SRWFX5hN1VEbzl9f41vFLkeZw0OG7NE45uYs7Ah_NRQmjCoxFwZZBkAOGqE5B-vAShZ4gdzxnGT=
+15ns7AoF8FY_OvKTdgQrrm_8emZNZdWDlUagsa4V7_kr7EbpkEV_OqrjlxWrZlYV3Hw style=
+=3Dtext-decoration:underline;color:#0B57D0;white-space:nowrap; target=3D_bl=
+ank>subscription</a> at any time.</p>
+</div>
+<br>
+<div class=3D"copy-lockup " style=3D"margin: 0 auto; width: 480px;">
+<p class=3D"subhead copy left " style=3D"margin: 0; line-height: 150%; font=
+-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans=
+-serif; font-weight: 400; letter-spacing: 0; font-size: 16px; color: #5f636=
+8; text-align: left;">Thank you for being a <span style=3D"white-space:nowr=
+ap; word-break: break-word; " class=3D"span ">Google AI Pro</span> subscrib=
+er.<br><br>- The Google One Team</p>
+</div>
+</div>
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 40px; line-heig=
+ht: 40px;" height=3D40>=C2=A0</td>
+</tr>
+</table>
+<table class=3Dfull-width style=3D"margin: 0 auto; width: 600px; background=
+-color: #F9F9F9;" width=3D600 bgcolor=3D#F9F9F9 role=3Dpresentation cellpad=
+ding=3D0 cellspacing=3D0 border=3D0><tr><td style=3D"font-family: inherit; =
+padding-top: 37px;"></td></tr></table>
+<table role=3Dpresentation border=3D0 cellspacing=3D0 cellpadding=3D0 class=
+=3D"full-width footer-legal" dir=3Dltr style=3D"margin: 0 auto; width: 600p=
+x; background-color: #F9F9F9; padding-bottom: 24px;" width=3D600 bgcolor=3D=
+#F9F9F9>
+<tr><td style=3D"font-family: inherit;"> <table role=3Dpresentation class=
+=3Dcenter border=3D0 cellspacing=3D0 cellpadding=3D0 style=3D"text-align: c=
+enter; margin: 0 auto;" align=3Dcenter>
+<tr>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> <td class=3D"gutter m-hide" style=3D"font-fa=
+mily: inherit;"></td>
+<td class valign=3Dtop style=3D"font-family: inherit; padding: 0px 8px 0px =
+0px; min-width: 10px; min-width: 0px; padding: 0 !important;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto;">
+<p class=3D"disclaimer tiny-body-font copy superscript-font" style=3D"lette=
+r-spacing: 0; font-weight: 400; font-size: 9px; font-family: &#39;Google Sa=
+ns&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans-serif; line-height: 18=
+px; color: #5E5E5E; margin: 0px;"></p>
+</div>
+</td><td valign=3Dtop class style=3D"font-family: inherit;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto;">
+<p class=3D"disclaimer tiny-body-font copy " style=3D"letter-spacing: 0; fo=
+nt-size: 12px; font-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Hel=
+vetica, Arial, sans-serif; line-height: 150%; font-weight: 400; color: #5E5=
+E5E; margin: 0px;">Age limits, language availability, system requirements, =
+and other <a href=3Dhttps://c.gle/AOExmq24HPfUfa6P9LVe185wqDDoU064tjhNBY8Nd=
+S4n8tWVIcEFKzriW_VyRQ_KAgiQnPr5zu2ys_YpB2WHgDy3-UTa95xMm165JP2IADrrJhstcTla=
+xfKREWvimyCJ_bNuG6nuR5UKhKZTH7QnuicoVKrspfHaOG6LCJ3mvQDHwEmknF8Co-i3zHy4Mit=
+9Uc4knLhYJVpir1voTw style=3D"text-decoration:underline;color:#0B57D0;font-f=
+amily: &#39;Google Sans&#39;, Roboto, sans-serif, Arial; font-size: 12px; l=
+ine-height: 18px; text-decoration: underline !important; white-space:nowrap=
+;" target=3D_blank>restrictions</a> may apply</p>
+</div>
+</td>
+<td class=3D"gutter m-hide" style=3D"font-family: inherit;"></td>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> </tr>
+</table></td></tr>
+<tr><td class style=3D"font-family: inherit;"><br></td></tr>
+<tr><td style=3D"font-family: inherit;"><table role=3Dpresentation class=3D=
+center border=3D0 cellspacing=3D0 cellpadding=3D0 style=3D"text-align: cent=
+er; margin: 0 auto;" align=3Dcenter>
+<tr>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> <td class=3D"gutter m-hide" style=3D"font-fa=
+mily: inherit;"></td>
+<td valign=3Dtop style=3D"font-family: inherit;">
+<div class=3D"copy-lockup " style=3D"margin: 0 auto;">
+<p class=3D"disclaimer tiny-body-font copy " style=3D"letter-spacing: 0; fo=
+nt-size: 12px; font-family: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Hel=
+vetica, Arial, sans-serif; line-height: 150%; font-weight: 400; color: #5E5=
+E5E; margin: 0px;">You have received this mandatory service announcement to=
+ update you about important changes to your <span style=3D"white-space:nowr=
+ap; word-break: break-word; " class=3D"span ">Google AI Pro</span> subscrip=
+tion.</p>
+</div>
+</td>
+<td class=3D"gutter m-hide" style=3D"font-family: inherit;"></td>
+<td aria-hidden=3Dtrue width=3D28 class=3Dmargin style=3D"font-family: inhe=
+rit; width: 28px;">=C2=A0</td> </tr><tr><td class=3Dfooter_legal_bottom_spa=
+cer style=3D"font-family: inherit;"><br><br></td></tr></table></td></tr>
+<tr><td style=3D"font-family: inherit;"><table class=3D"center full-width" =
+role=3Dpresentation border=3D0 cellspacing=3D0 cellpadding=3D0 style=3D"tex=
+t-align: center; margin: 0 auto; width: 600px;" width=3D600 align=3Dcenter>=
+<tr><td class=3D"google_logo center" style=3D"font-family: inherit; text-al=
+ign: center; margin: 0 auto;" align=3Dcenter>
+<div class=3D"img-com ">
+<img src=3Dhttps://services.google.com/fh/files/emails/g1logo-01.png alt wi=
+dth=3D69 height=3Dauto style=3D"display: block; text-align: center; margin:=
+ 0 auto;" aria-hidden=3Dtrue class=3D"img img-com__img center " border=3D0>
+</div>
+</td></tr><tr><td colspan=3D3 style=3D"font-family: inherit;">
+<table class=3D"spacer " width=3D100% role=3Dpresentation cellpadding=3D0 c=
+ellspacing=3D0 border=3D0>
+<tr>
+<td class=3Dempty style=3D"font-family: inherit; font-size: 10px; line-heig=
+ht: 10px;" height=3D10>=C2=A0</td>
+</tr>
+</table></td></tr><tr><td class align=3Dcenter style=3D"font-family: inheri=
+t; direction: ltr;" dir=3Dltr><span class=3D"forApple text-secondary-copy" =
+style=3D"color: #5E5E5E;"><a class=3Dtext-secondary-copy style=3D"font-fami=
+ly: &#39;Google Sans&#39;, &#39;Open Sans&#39;, Helvetica, Arial, sans-seri=
+f; letter-spacing: 0px; text-decoration: none; color: #5E5E5E; font-size: 1=
+2px; line-height: 20px; font-weight: 400;"><font style=3D"cursor: text;">
+<span class=3Ddesktop-hide>
+<span style=3D"font-size:inherit; color:inherit; font-weight:inherit; line-=
+height:inherit; font-family:inherit;">=C2=A9 2026 Google LLC<br>1600 Amphit=
+heatre Parkway,<br>Mountain View, CA 94043</span>
+</span><span class=3Dm-hide>
+<span style=3D"font-size:inherit; color:inherit; font-weight:inherit; line-=
+height:inherit; font-family:inherit;">=C2=A9 2026 Google LLC 1600 Amphithea=
+tre Parkway, Mountain View, CA 94043</span>
+</span></font></a></span></td></tr></table></td></tr>
+</table>
+</div>
+</div></section>
+<div class=3Dgmailfix style=3D"display: none; white-space:nowrap;line-heigh=
+t:normal;font-size:15px;font-weight:normal;font-variant:normal;font-style:n=
+ormal;font-family:courier;color:#ffffff;min-width:600px!important;max-width=
+:600px!important;">
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 </div>
+</td></tbody></table>
+<img alt=3D"" height=3D1 width=3D3 src=3Dhttps://notifications.google.com/g=
+/img/AOExmq279UU-mzHSkUqSXQBa68E8r_2ykkH8Q7RNBAaLojP7u3JsA0TRtoYlY4SshrRjyf=
+b9lY4nfepRYT7AZbZB5xRFbRugyRN62dTlnhIWyEO7UufcV4KXgN3gQinQtYkA34iOwfA.gif><=
+/body>
+</html>
+
+--000000000000766590065239563b--

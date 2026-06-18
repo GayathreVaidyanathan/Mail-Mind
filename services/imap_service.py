@@ -153,6 +153,58 @@ class IMAPService:
         print(f"  ✓ Fetched {len(emails)} unread email(s)")
         return emails
 
+    def list_folders(self) -> list[str]:
+        """
+        Returns all available IMAP folders/labels.
+
+        Examples:
+            INBOX
+            Auto/Spam
+            Auto/Promotional
+            Finance
+            Career
+
+        Works across Gmail, Outlook, Yahoo, Zoho, etc.
+        """
+        if not self.imap:
+            raise RuntimeError("Not connected. Call connect() first.")
+
+        folders_list = []
+
+        try:
+            status, folders = self.imap.list()
+
+            if status != "OK":
+                return []
+
+            for folder in folders:
+                try:
+                    decoded = folder.decode()
+
+                    # Folder name is everything after the last quote-space
+                    # Example:
+                    # b'(\\HasNoChildren) "/" "Auto/Spam"'
+                    # → Auto/Spam
+                    parts = decoded.split(' "/" ')
+                    if len(parts) >= 2:
+                        name = parts[-1].strip('"')
+                    else:
+                        # fallback for providers with different formatting
+                        name = decoded.split()[-1].strip('"')
+
+                    folders_list.append(name)
+
+                except Exception:
+                    continue
+
+            folders_list = sorted(set(folders_list))
+
+            print(f"  ✓ Found {len(folders_list)} folder(s)")
+            return folders_list
+
+        except Exception as e:
+            print(f"  ✗ Could not list folders: {e}")
+            return []
     # ── Parse ──────────────────────────────────────────────────────────────────
 
     def _parse_email(self, raw: bytes, imap_id: str) -> Optional[dict]:

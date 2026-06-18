@@ -28,8 +28,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-from routers import auth, pipeline
-
+from routers import auth, export, pipeline
 
 # ── App ────────────────────────────────────────────────────────────────────────
 
@@ -61,7 +60,7 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api")
 app.include_router(pipeline.router, prefix="/api")
-
+app.include_router(export.router, prefix="/api")
 # ── Health check ───────────────────────────────────────────────────────────────
 
 @app.get("/api/health")
