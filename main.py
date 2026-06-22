@@ -22,13 +22,27 @@ For deployment on Render:
   - Start command : uvicorn main:app --host 0.0.0.0 --port 8000
 """
 
+import logging
+import os
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
-import os
 
 from routers import auth, export, pipeline
+
+# ── Logging ────────────────────────────────────────────────────────────────────
+# Set to DEBUG to see full tracebacks from all routers and services.
+# Change to logging.INFO for quieter production output.
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s  %(levelname)-8s  %(name)s: %(message)s",
+    datefmt="%H:%M:%S",
+)
+
+logger = logging.getLogger(__name__)
 
 # ── App ────────────────────────────────────────────────────────────────────────
 
@@ -40,9 +54,6 @@ app = FastAPI(
 
 
 # ── CORS ───────────────────────────────────────────────────────────────────────
-# Allows the React dev server (localhost:5173) to talk to FastAPI
-# during development. In production both are served from the same
-# origin so CORS isn't needed — but keeping it doesn't hurt.
 
 app.add_middleware(
     CORSMiddleware,
@@ -58,9 +69,11 @@ app.add_middleware(
 
 # ── API routers ────────────────────────────────────────────────────────────────
 
-app.include_router(auth.router, prefix="/api")
+app.include_router(auth.router,     prefix="/api")
 app.include_router(pipeline.router, prefix="/api")
-app.include_router(export.router, prefix="/api")
+app.include_router(export.router,   prefix="/api")
+
+
 # ── Health check ───────────────────────────────────────────────────────────────
 
 @app.get("/api/health")
@@ -70,14 +83,10 @@ async def health():
 
 
 # ── Serve React frontend ───────────────────────────────────────────────────────
-# In production, FastAPI serves the built React app from frontend/dist.
-# Any route not matched by the API falls through to index.html so
-# React Router can handle client-side navigation.
 
 FRONTEND_DIST = os.path.join(os.path.dirname(__file__), "frontend", "dist")
 
 if os.path.exists(FRONTEND_DIST):
-    # Serve static assets (JS, CSS, images)
     app.mount(
         "/assets",
         StaticFiles(directory=os.path.join(FRONTEND_DIST, "assets")),
@@ -86,9 +95,5 @@ if os.path.exists(FRONTEND_DIST):
 
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
-        """
-        Catch-all route — serves index.html for any non-API route.
-        Lets React Router handle /connect, /dashboard etc. on the client.
-        """
         index = os.path.join(FRONTEND_DIST, "index.html")
         return FileResponse(index)

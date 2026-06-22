@@ -14,6 +14,19 @@ Label → Folder mapping:
   to replicate the labeling behavior. Emails are COPIED to the folder
   (not moved) so they remain in INBOX too.
 
+Special-use detection (RFC 6154):
+  list_folders_rich() reads the special-use attributes advertised by the
+  server in its LIST response (\\Sent, \\Drafts, \\Trash, \\Junk, \\All,
+  \\Flagged / \\Starred) and maps them to friendly display names.
+  This is provider-agnostic — Gmail, Outlook, Yahoo, iCloud all advertise
+  these attributes in the standard way.
+
+Starred / Flagged emails:
+  On providers where \\Flagged maps to a real folder (e.g. [Gmail]/Starred),
+  list_folders_rich() surfaces that folder. As a universal fallback,
+  get_starred_raw_emails() fetches messages with the \\Flagged IMAP flag
+  directly from INBOX, which works on every provider.
+
 Authentication:
   Uses app passwords, not OAuth. Every provider supports this:
     Gmail   → myaccount.google.com/apppasswords
@@ -56,6 +69,18 @@ PROVIDER_MAP = {
 # Folders created for routing (mirrors Gmail labels)
 FOLDER_SPAM        = "Auto/Spam"
 FOLDER_PROMOTIONAL = "Auto/Promotional"
+
+# RFC 6154 special-use attribute → friendly display name
+SPECIAL_USE_LABELS = {
+    r"\sent":    "Sent",
+    r"\drafts":  "Drafts",
+    r"\trash":   "Trash",
+    r"\junk":    "Spam",
+    r"\all":     "All Mail",
+    r"\flagged": "Starred",   # Gmail: [Gmail]/Starred; others: virtual
+    r"\archive": "Archive",
+    r"\important": "Important",
+}
 
 
 # ── IMAPService ────────────────────────────────────────────────────────────────
@@ -155,56 +180,147 @@ class IMAPService:
 
     def list_folders(self) -> list[str]:
         """
-        Returns all available IMAP folders/labels.
+        Returns all available IMAP folder names as a flat list.
+        Kept for backward compatibility with existing callers.
+        For richer info (special-use, friendly names), use list_folders_rich().
+        """
+        return [f["name"] for f in self.list_folders_rich()]
 
-        Examples:
-            INBOX
-            Auto/Spam
-            Auto/Promotional
-            Finance
-            Career
+    def list_folders_rich(self) -> list[dict]:
+        """
+        Returns all available IMAP folders with metadata.
 
-        Works across Gmail, Outlook, Yahoo, Zoho, etc.
+        Each entry:
+        {
+            "name":         str,   # raw IMAP folder name  e.g. "[Gmail]/Sent Mail"
+            "label":        str,   # friendly display name e.g. "Sent"
+            "type":         str,   # "system" | "custom" | "inbox"
+            "special_use":  str,   # RFC 6154 attribute e.g. "\\Sent", or ""
+        }
+
+        System folders are detected via RFC 6154 special-use attributes
+        advertised in the server's LIST response — no hardcoded name matching,
+        so this works across Gmail, Outlook, Yahoo, iCloud, custom servers.
+
+        INBOX is always included and typed as "inbox".
+        Folders starting with [Gmail] or [GoogleMail] that have no
+        recognised special-use attribute (e.g. the [Gmail] parent itself)
+        are omitted.
         """
         if not self.imap:
             raise RuntimeError("Not connected. Call connect() first.")
 
-        folders_list = []
+        result = []
+
+        # Always include INBOX first
+        result.append({
+            "name":        "INBOX",
+            "label":       "Inbox",
+            "type":        "inbox",
+            "special_use": "",
+        })
 
         try:
             status, folders = self.imap.list()
 
             if status != "OK":
-                return []
+                return result
 
             for folder in folders:
                 try:
                     decoded = folder.decode()
 
-                    # Folder name is everything after the last quote-space
-                    # Example:
-                    # b'(\\HasNoChildren) "/" "Auto/Spam"'
-                    # → Auto/Spam
+                    # Parse attributes from the LIST response line:
+                    # e.g. '(\HasNoChildren \Sent) "/" "[Gmail]/Sent Mail"'
+                    attr_match = re.match(r'\(([^)]*)\)', decoded)
+                    attrs_str = attr_match.group(1).lower() if attr_match else ""
+                    attrs = set(attrs_str.split())
+
+                    # Parse folder name (everything after last ' "/" ')
                     parts = decoded.split(' "/" ')
                     if len(parts) >= 2:
-                        name = parts[-1].strip('"')
+                        name = parts[-1].strip().strip('"')
                     else:
-                        # fallback for providers with different formatting
                         name = decoded.split()[-1].strip('"')
 
-                    folders_list.append(name)
+                    # Skip unselectable containers (e.g. the [Gmail] group itself)
+                    if r"\noselect" in attrs:
+                        continue
+
+                    # Skip INBOX — already added above
+                    if name.upper() == "INBOX":
+                        continue
+
+                    # Detect special-use attribute
+                    special_use = ""
+                    friendly_label = ""
+                    for attr_key, friendly in SPECIAL_USE_LABELS.items():
+                        if attr_key in attrs:
+                            special_use = attr_key
+                            friendly_label = friendly
+                            break
+
+                    if special_use:
+                        # It's a system/special folder
+                        result.append({
+                            "name":        name,
+                            "label":       friendly_label,
+                            "type":        "system",
+                            "special_use": special_use,
+                        })
+                    else:
+                        # Skip provider-internal folders with no recognised role
+                        # (e.g. [Gmail]/... sub-folders that aren't special-use)
+                        if name.startswith("[Gmail]") or name.startswith("[GoogleMail]"):
+                            continue
+
+                        # Custom label/folder
+                        result.append({
+                            "name":        name,
+                            "label":       name,
+                            "type":        "custom",
+                            "special_use": "",
+                        })
 
                 except Exception:
                     continue
 
-            folders_list = sorted(set(folders_list))
-
-            print(f"  ✓ Found {len(folders_list)} folder(s)")
-            return folders_list
+            print(f"  ✓ Found {len(result)} folder(s)")
+            return result
 
         except Exception as e:
             print(f"  ✗ Could not list folders: {e}")
+            return result
+
+    def get_starred_raw_emails(self, folder: str = "INBOX") -> list[bytes]:
+        """
+        Fetches raw RFC822 bytes for all messages flagged as \\Flagged
+        (i.e. Starred in Gmail) within the given folder.
+
+        On Gmail, [Gmail]/Starred is a real selectable folder and this
+        method is used as a fallback for providers that don't expose a
+        dedicated Starred/Flagged folder via special-use attributes.
+
+        Returns a list of raw email byte strings, ready for APPEND or .eml writing.
+        """
+        if not self.imap:
+            raise RuntimeError("Not connected. Call connect() first.")
+
+        self.imap.select(folder)
+        status, data = self.imap.search(None, "FLAGGED")
+
+        if status != "OK" or not data[0]:
             return []
+
+        raw_emails = []
+        for eid in data[0].split():
+            status, msg_data = self.imap.fetch(eid, "(RFC822)")
+            if status == "OK" and msg_data and msg_data[0]:
+                raw_emails.append(msg_data[0][1])
+
+        print(f"  ✓ Fetched {len(raw_emails)} starred email(s) from {folder}")
+        return raw_emails
+
     # ── Parse ──────────────────────────────────────────────────────────────────
 
     def _parse_email(self, raw: bytes, imap_id: str) -> Optional[dict]:
@@ -376,17 +492,11 @@ class IMAPService:
         Creates an IMAP folder if it doesn't already exist.
         Handles nested folders (e.g. Auto/Spam) by creating
         the parent folder first before the child.
-
-        Uses LIST to check existence instead of SELECT —
-        SELECT on a non-existent folder behaves unpredictably
-        across providers (Zoho, Gmail, Outlook all differ).
         """
         if folder_name in self._label_cache:
             return
 
         try:
-            # ── Step 1: Create parent folder first if nested ───────
-            # e.g. "Auto/Spam" → create "Auto" first
             if "/" in folder_name:
                 parent = folder_name.rsplit("/", 1)[0]
                 if parent not in self._label_cache:
@@ -394,12 +504,9 @@ class IMAPService:
                         self.imap.create(parent)
                         print(f"  ✓ Created parent folder: {parent}")
                     except Exception:
-                        # Parent already exists — that's fine
                         pass
                     self._label_cache[parent] = True
 
-            # ── Step 2: Check if folder exists using LIST ──────────
-            # LIST is more reliable than SELECT for existence check
             status, folders = self.imap.list('""', folder_name)
 
             folder_exists = False
@@ -408,7 +515,6 @@ class IMAPService:
                 if folder_name.lower() in folder_str:
                     folder_exists = True
 
-            # ── Step 3: Create folder if it doesn't exist ──────────
             if not folder_exists:
                 create_status, _ = self.imap.create(folder_name)
                 if create_status == "OK":
@@ -418,7 +524,6 @@ class IMAPService:
 
             self._label_cache[folder_name] = True
 
-            # Go back to INBOX after folder operations
             self.imap.select("INBOX")
 
         except Exception as e:
